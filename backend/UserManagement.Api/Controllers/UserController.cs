@@ -31,7 +31,8 @@ public class UsersController : ControllerBase // esta clase es un controlador de
             Name = dto.Name,
             Email = dto.Email,
             Active = dto.Active,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            Role = dto.Role
         };
         await _service.AddAsync(user); // llamamos al método AddAsync del servicio de usuario para agregar el usuario a la base de datos de forma asincrónica.
        /*  return Ok(user); // devolvemos una respuesta HTTP 200 OK con el usuario agregado en el cuerpo de la respuesta. */
@@ -71,6 +72,7 @@ public class UsersController : ControllerBase // esta clase es un controlador de
     }
 
     [HttpDelete("{id}")] // esto es un atributo que indica que el método DeleteAsync es un endpoint HTTP DELETE con un parámetro de ruta id, lo que significa que se puede acceder a él mediante una solicitud DELETE a la URL api/user/{id}.   
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id) // este método es un endpoint que recibe un parámetro id en la ruta de la solicitud y elimina el usuario con ese id de la base de datos.
     {
         var user = await _service.GetByIdAsync(id); // llamamos al método GetByIdAsync del servicio de usuario para obtener el usuario con el id especificado de forma asincrónica.

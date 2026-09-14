@@ -12,7 +12,7 @@ public class UserCreateDto
     public string Email { get; set; } = string.Empty;
      [Required]
     public string Password { get; set; } = string.Empty;
-
+    public string Role { get; set; } = "User";
     public bool Active { get; set; }
 }
 // El DTO UserCreateDto se utiliza para transferir los datos necesarios para crear un nuevo usuario en la aplicación. Contiene propiedades para el nombre, correo electrónico y estado de activación del usuario, que son esenciales para el proceso de creación de usuarios.

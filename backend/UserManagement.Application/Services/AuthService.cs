@@ -40,7 +40,7 @@ public class AuthService : IAuthService
             dto.Password,
             user.PasswordHash
         );
-        
+
         if (!passwordValid)
         {
             return null;
@@ -50,7 +50,8 @@ public class AuthService : IAuthService
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.Name)
+            new Claim(ClaimTypes.Name, user.Name),
+            new Claim(ClaimTypes.Role, user.Role)
         };
 
         var key = new SymmetricSecurityKey(

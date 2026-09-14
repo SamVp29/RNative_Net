@@ -13,6 +13,6 @@ public class User
     public string Name { get; set; } = string.Empty; //inicializamos la propiedad Name con un valor por defecto de cadena vacía
     public string Email { get; set; } = string.Empty;
     public bool Active { get; set; }
-
     public string PasswordHash { get; set; } = string.Empty;
+    public string Role { get; set; } = "User";
 }
