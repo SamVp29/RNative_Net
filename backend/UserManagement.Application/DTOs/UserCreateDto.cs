@@ -10,6 +10,9 @@ public class UserCreateDto
     [Required]
     [EmailAddress] // este atributo indica que la propiedad Email es obligatoria y debe tener un formato de dirección de correo electrónico válido. Esto ayuda a garantizar que los datos ingresados cumplan con ciertos criterios antes de ser procesados o almacenados en la base de datos.
     public string Email { get; set; } = string.Empty;
+     [Required]
+    public string Password { get; set; } = string.Empty;
+
     public bool Active { get; set; }
 }
 // El DTO UserCreateDto se utiliza para transferir los datos necesarios para crear un nuevo usuario en la aplicación. Contiene propiedades para el nombre, correo electrónico y estado de activación del usuario, que son esenciales para el proceso de creación de usuarios.

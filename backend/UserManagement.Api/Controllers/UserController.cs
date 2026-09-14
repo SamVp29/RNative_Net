@@ -2,10 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using UserManagement.Application.Interfaces;
 using UserManagement.Domain.Entities;  
 using UserManagement.Application.DTOs; // DTOs (Data Transfer Objects) son objetos que se utilizan para transferir datos entre diferentes capas de una aplicación, como la capa de presentación y la capa de negocio. Los DTOs ayudan a encapsular los datos y a reducir el acoplamiento entre las capas, lo que facilita el mantenimiento y la evolución del código.
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserManagement.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+
 public class UsersController : ControllerBase // esta clase es un controlador de API que maneja las solicitudes HTTP relacionadas con la entidad User y hereda de ControllerBase, que es una clase base proporcionada por ASP.NET Core para crear controladores de API.
 {
     private readonly IUserService _service; // declaramos un campo privado readonly que representa el servicio de usuario y nos permite realizar operaciones CRUD en la entidad User a través de los métodos definidos en la interfaz IUserService.
@@ -27,7 +30,8 @@ public class UsersController : ControllerBase // esta clase es un controlador de
         {
             Name = dto.Name,
             Email = dto.Email,
-            Active = dto.Active
+            Active = dto.Active,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
         };
         await _service.AddAsync(user); // llamamos al método AddAsync del servicio de usuario para agregar el usuario a la base de datos de forma asincrónica.
        /*  return Ok(user); // devolvemos una respuesta HTTP 200 OK con el usuario agregado en el cuerpo de la respuesta. */
