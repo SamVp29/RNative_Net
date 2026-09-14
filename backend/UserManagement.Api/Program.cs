@@ -4,6 +4,8 @@ using UserManagement.Domain.Interfaces;
 using UserManagement.Infrastructure.Repositories;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Services;
+using System.Runtime.ExceptionServices;
+using UserManagement.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>(); // Uso de Middleware
 
 app.UseAuthorization();
 
