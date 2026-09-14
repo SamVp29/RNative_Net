@@ -1,32 +1,25 @@
-import {User} from '../types/user';
-
-const users: User[] = [
-    {
-        id: 1,
-        name: 'Samuel',
-        email: 'samuel@example.com',
-        active: true,
-    },
-    {
-        id: 2,
-        name: 'Juan',
-        email: 'juan@example.com',
-        active: false,
-    },
-    {
-        id: 3,
-        name: 'Maria',
-        email: 'maria@example.com',
-        active: true,
-    }
-];
+import { API_BASE_URL } from '@/config/api';
+import { User } from '@/types/user';
+import { getToken } from '@/services/session';
 
 export const userService = {
-    getUsers(): User[] {
-        return users;
-    },
+  async getUsers(): Promise<User[]> {
+    const token = await getToken();
 
-    getUserById(id: number): User | undefined {
-        return users.find(user => user.id === id);
-    },
+    const response = await fetch(`${API_BASE_URL}/Users`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    const payload = await response.json().catch(() => []);
+
+    if (!response.ok) {
+      throw new Error(payload?.message || 'No se pudieron cargar los usuarios.');
+    }
+
+    return Array.isArray(payload) ? payload : [];
+  },
 };

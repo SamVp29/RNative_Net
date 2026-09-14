@@ -29,6 +29,12 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "User Management API",
+        Version = "v1"
+    });
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -38,15 +44,27 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Description = "Ingresa el token JWT."
     });
-
-    options.AddSecurityRequirement(document =>
-        new OpenApiSecurityRequirement
-        {
-            [new OpenApiSecuritySchemeReference("Bearer", document)] = []
-        });
 });
 
 builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ExpoPolicy", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:8081",
+                "http://127.0.0.1:8081",
+                "http://10.0.2.2:8081",
+                "exp://10.0.2.2:8081",
+                "http://192.168.1.15:8081"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -79,6 +97,8 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>(); // Uso de Middleware
+
+app.UseCors("ExpoPolicy");
 
 app.UseAuthentication();
 
